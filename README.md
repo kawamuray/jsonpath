@@ -136,3 +136,34 @@ jsonpath --file=example.json --path='$.Items[*].tags[*]+' --keys
 ...  "london"  
   
 ... = keys/indexes of path  
+
+### Performance
+
+	BenchmarkUnmarshalMix-8     	     500	   3358953 ns/op	 1262149 B/op	   22784 allocs/op
+	BenchmarkDecodeMix-8        	    1000	   1149598 ns/op	     644 B/op	      24 allocs/op
+	BenchmarkSliceMix-8         	    2000	    729137 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkReaderMix-8        	     500	   2513132 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkUnmarshalDigits-8  	   10000	    115365 ns/op	   43448 B/op	    1315 allocs/op
+	BenchmarkDecodeDigits-8     	   50000	     24255 ns/op	      48 B/op	       1 allocs/op
+	BenchmarkSliceDigits-8      	   50000	     43576 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkReaderDigits-8     	   20000	     67710 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkUnmarshalStrings-8 	   30000	     57586 ns/op	   22584 B/op	     630 allocs/op
+	BenchmarkDecodeStrings-8    	  100000	     16210 ns/op	      48 B/op	       1 allocs/op
+	BenchmarkSliceStrings-8     	  100000	     13828 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkReaderStrings-8    	   30000	     40430 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkUnmarshalLiterals-8	   30000	     41388 ns/op	   16912 B/op	     262 allocs/op
+	BenchmarkDecodeLiterals-8   	  100000	     17727 ns/op	      48 B/op	       1 allocs/op
+	BenchmarkSliceLiterals-8    	  100000	     22474 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkReaderLiterals-8   	   30000	     55023 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkUnmarshalArrays-8  	   10000	    116467 ns/op	   32456 B/op	    1014 allocs/op
+	BenchmarkDecodeArrays-8     	  100000	     20497 ns/op	      48 B/op	       1 allocs/op
+	BenchmarkSliceArrays-8      	   50000	     26537 ns/op	   12544 B/op	       4 allocs/op
+	BenchmarkReaderArrays-8     	   30000	     46001 ns/op	   12544 B/op	       4 allocs/op
+	BenchmarkUnmarshalObjects-8 	   10000	    102506 ns/op	   76048 B/op	     643 allocs/op
+	BenchmarkDecodeObjects-8    	   50000	     25513 ns/op	       0 B/op	       0 allocs/op
+	BenchmarkSliceObjects-8     	  100000	     19682 ns/op	    5888 B/op	       3 allocs/op
+	BenchmarkReaderObjects-8    	   30000	     52160 ns/op	    5888 B/op	       3 allocs/op
+	BenchmarkStdUnmarshalLarge-8	       1	6120026114 ns/op	1185057216 B/op	36537963 allocs/op
+	BenchmarkStdLibDecodeLarge-8	       1	1919992027 ns/op	536869232 B/op	      34 allocs/op
+	BenchmarkSliceLexerLarge-8  	       1	1655279052 ns/op	     896 B/op	       1 allocs/op
+	BenchmarkReaderLexerLarge-8 	       1	3898017338 ns/op	     896 B/op	       1 allocs/op
