@@ -279,6 +279,7 @@ func pathEndValue(q *query, e *Eval, i *Item) queryStateFn {
 		q.valLoc = *newStack()
 		q.buffer.Truncate(0)
 		q.pos -= 1
+		q.trySpillOver()
 		return pathMatchOp
 	}
 	return pathEndValue
