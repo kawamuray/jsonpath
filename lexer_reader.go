@@ -45,7 +45,7 @@ func (l *readerLexer) takeString() error {
 		return fmt.Errorf("Expected \" as start of string instead of %#U", cur)
 	}
 
-	var previous byte
+	var previous, byteBeforePrevious byte
 looper:
 	for {
 		curByte, err := l.bufInput.ReadByte()
@@ -55,7 +55,7 @@ looper:
 		l.lexeme.WriteByte(curByte)
 
 		if curByte == '"' {
-			if previous != '\\' {
+			if previous != '\\' || previous == '\\' && byteBeforePrevious == '\\' {
 				break looper
 			} else {
 				curByte, err = l.bufInput.ReadByte()
@@ -66,6 +66,7 @@ looper:
 			}
 		}
 
+		byteBeforePrevious = previous
 		previous = curByte
 	}
 	return nil
