@@ -44,7 +44,7 @@ func (l *sliceLexer) takeString() error {
 		return fmt.Errorf("Expected \" as start of string instead of %#U", cur)
 	}
 
-	var previous int
+	var previous, byteBeforePrevious int
 looper:
 	for {
 		if int(curPos) >= inputLen {
@@ -54,13 +54,14 @@ looper:
 		cur := int(l.input[curPos])
 		curPos++
 		if cur == '"' {
-			if previous == noValue || previous != '\\' {
+			if previous == noValue || previous != '\\' || previous == '\\' && byteBeforePrevious == '\\' {
 				break looper
 			} else {
 				l.take()
 			}
 		}
-
+		
+		byteBeforePrevious = previous
 		previous = cur
 	}
 	l.pos = curPos
