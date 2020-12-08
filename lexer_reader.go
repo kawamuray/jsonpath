@@ -45,7 +45,7 @@ func (l *readerLexer) takeString() error {
 		return fmt.Errorf("Expected \" as start of string instead of %#U", cur)
 	}
 
-	var previous, byteBeforePrevious byte
+	var previous, byteBeforePrevious, secondByteBeforePrevious byte
 looper:
 	for {
 		curByte, err := l.bufInput.ReadByte()
@@ -55,17 +55,11 @@ looper:
 		l.lexeme.WriteByte(curByte)
 
 		if curByte == '"' {
-			if previous != '\\' || previous == '\\' && byteBeforePrevious == '\\' {
+			if previous != '\\' || previous == '\\' && byteBeforePrevious == '\\' && secondByteBeforePrevious != '\\' {
 				break looper
-			} else {
-				curByte, err = l.bufInput.ReadByte()
-				if err == io.EOF {
-					return errors.New("Unexpected EOF in string")
-				}
-				l.lexeme.WriteByte(curByte)
 			}
 		}
-
+		secondByteBeforePrevious = byteBeforePrevious
 		byteBeforePrevious = previous
 		previous = curByte
 	}
