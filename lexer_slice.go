@@ -44,8 +44,8 @@ func (l *sliceLexer) takeString() error {
 		return fmt.Errorf("Expected \" as start of string instead of %#U", cur)
 	}
 
-	var previous int
-looper:
+	var previous, backslashCount int
+
 	for {
 		if int(curPos) >= inputLen {
 			l.pos = curPos
@@ -54,13 +54,18 @@ looper:
 		cur := int(l.input[curPos])
 		curPos++
 		if cur == '"' {
-			if previous == noValue || previous != '\\' {
-				break looper
+			if previous == noValue || backslashCount % 2 == 0 {
+				break
 			} else {
 				l.take()
 			}
 		}
-
+		
+		if cur == '\\' {
+            		backslashCount++
+        	} else {
+            		backslashCount = 0
+        	} 
 		previous = cur
 	}
 	l.pos = curPos
