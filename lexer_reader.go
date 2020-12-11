@@ -45,28 +45,21 @@ func (l *readerLexer) takeString() error {
 		return fmt.Errorf("Expected \" as start of string instead of %#U", cur)
 	}
 
-	var previous byte
-looper:
+	var backslashCount int
 	for {
 		curByte, err := l.bufInput.ReadByte()
 		if err == io.EOF {
 			return errors.New("Unexpected EOF in string")
 		}
 		l.lexeme.WriteByte(curByte)
-
-		if curByte == '"' {
-			if previous != '\\' {
-				break looper
-			} else {
-				curByte, err = l.bufInput.ReadByte()
-				if err == io.EOF {
-					return errors.New("Unexpected EOF in string")
-				}
-				l.lexeme.WriteByte(curByte)
-			}
+		if curByte == '"' && backslashCount % 2 == 0 {
+			break
 		}
-
-		previous = curByte
+		if curByte == '\\' {
+            		backslashCount++
+        	} else {
+            		backslashCount = 0
+        	} 
 	}
 	return nil
 }
